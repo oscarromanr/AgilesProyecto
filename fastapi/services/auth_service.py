@@ -12,7 +12,6 @@ class AuthService(object):
         self.repo = UserRepo(UserModel, db)
 
     def login(self, credentials: UserWithTokenSchema):
-        print("mamarre")
         user = self.repo.login(credentials.username, credentials.password)
         if not user:
             raise AppException.Unauthorized(detail="Credenciales inválidas")
