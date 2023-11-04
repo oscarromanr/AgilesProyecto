@@ -15,6 +15,7 @@ class UserSchema(UserCreateSchema):
     id: int
     class Config:
         orm_mode = True
+        exclude = ["password"]
 
 class UserAudit(UserSchema):
     created_at: Optional[datetime]
