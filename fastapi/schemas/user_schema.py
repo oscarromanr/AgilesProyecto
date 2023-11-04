@@ -13,11 +13,25 @@ class UserCreateSchema(UserCredentialsSchema):
 
 class UserSchema(UserCreateSchema):
     id: int
+
     class Config:
         orm_mode = True
-        exclude = ["password"]
 
-class UserAudit(UserSchema):
+class UserWithouthPasswordSchema(BaseModel):
+    id: int
+    first_name: str
+    last_name: str
+    username: str
+    email: constr(regex=r"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$")
+
+    class Config:
+        orm_mode = True
+
+class UserWithTokenSchema(BaseModel):
+    user: UserWithouthPasswordSchema
+    token: str
+
+class UserAudit(UserWithouthPasswordSchema):
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
     deleted_at: Optional[datetime]
