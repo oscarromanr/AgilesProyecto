@@ -51,5 +51,6 @@ npm run dev
 ```
 
 ## Uso
-Para usar el proyecto, se debe acceder a la siguiente URL: http://localhost:3000/ donde se mostrará la interfaz gráfica del proyecto.
+Para usar el proyecto, se debe acceder a la siguiente URL: http://localhost:5173/ donde se mostrará la interfaz gráfica del proyecto.
+
 Para acceder a la documentación de la API, se debe acceder a la siguiente URL: http://localhost:8000/docs donde se mostrará la documentación de la API.
