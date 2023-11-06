@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from configs.database import create_tables
 from fastapi.middleware.cors import CORSMiddleware
-from routers import user_router
+from routers import user_router, auth_router
 
 create_tables()
 
@@ -20,6 +20,7 @@ app.add_middleware(
 
 # Routers
 app.include_router(user_router.router)
+app.include_router(auth_router.router)
 
 
 
