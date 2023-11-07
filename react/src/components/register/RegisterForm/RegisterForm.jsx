@@ -69,6 +69,7 @@ const RegisterForm = () => {
         e.preventDefault();
 
         if (validateForm()) {
+            //Aqui llamar la API (Backend)
             navigate('/', { state: { successMessage: 'Usuario registrado exitosamente. Por favor, inicia sesión.' } });
         } else {
             onInputChange({
