@@ -15,7 +15,7 @@ class UserService(object):
 
     def get_by_id(self, id: int):
         user = self.repo.get_by_id(id)
-        if not self.repo.get_by_id(id):
+        if not user:
             raise AppException.NotFound(detail=f"No se ha encontrado el usuario con el id: {id}")
         return user
 
