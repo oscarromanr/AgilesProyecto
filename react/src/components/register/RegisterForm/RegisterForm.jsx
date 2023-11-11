@@ -2,6 +2,7 @@ import './RegisterForm.css';
 import { useState } from 'react';
 import { useForm } from '../../../hooks/useForm';
 import { useNavigate } from 'react-router-dom';
+import RegisterService from '../../../services/registerService';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
@@ -27,56 +28,76 @@ const RegisterForm = () => {
     const validateForm = () => {
         let isValid = true;
         const requiredFields = [
-          { name: 'username', message: 'Por favor, ingresa un nombre de usuario.' },
-          { name: 'email', message: 'Por favor, ingresa un correo electrónico.' },
-          { name: 'firstName', message: 'Por favor, ingresa tu nombre.' },
-          { name: 'lastName', message: 'Por favor, ingresa tu apellido.' },
-          { name: 'password', message: 'Por favor, ingresa una contraseña.' },
-          { name: 'confirmPassword', message: 'Por favor, confirma tu contraseña.' },
+            { name: 'username', message: 'Por favor, ingresa un nombre de usuario.' },
+            { name: 'email', message: 'Por favor, ingresa un correo electrónico.' },
+            { name: 'firstName', message: 'Por favor, ingresa tu nombre.' },
+            { name: 'lastName', message: 'Por favor, ingresa tu apellido.' },
+            { name: 'password', message: 'Por favor, ingresa una contraseña.' },
+            { name: 'confirmPassword', message: 'Por favor, confirma tu contraseña.' },
         ];
-      
+
         for (const field of requiredFields) {
-          if (!formState[field.name]) {
+            if (!formState[field.name]) {
+                onInputChange({
+                    target: {
+                        name: 'errorMessage',
+                        value: field.message,
+                    },
+                });
+                isValid = false;
+            }
+        }
+
+        if (password.length < 8) {
+            setPasswordError(true);
+            isValid = false;
+        }
+
+        if (password !== confirmPassword) {
             onInputChange({
-              target: {
-                name: 'errorMessage',
-                value: field.message,
-              },
+                target: {
+                    name: 'errorMessage',
+                    value: 'Las contraseñas no coinciden.',
+                },
             });
             isValid = false;
-          }
         }
-      
-        if (password.length < 8) {
-          setPasswordError(true);
-          isValid = false;
-        }
-      
-        if (password !== confirmPassword) {
-          onInputChange({
-            target: {
-              name: 'errorMessage',
-              value: 'Las contraseñas no coinciden.',
-            },
-          });
-          isValid = false;
-        }
-      
-        return isValid;
-      };
 
-    const handleSubmit = (e) => {
+        return isValid;
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (validateForm()) {
-            navigate('/', { state: { successMessage: 'Usuario registrado exitosamente. Por favor, inicia sesión.' } });
-        } else {
-            onInputChange({
-                target: {
-                    name: 'isInvalid',
-                    value: true,
-                },
-            });
+            const registerService = new RegisterService();
+
+            const user = {
+                username: username,
+                password: password,
+                first_name: firstName,
+                last_name: lastName,
+                email: email
+            };
+
+            const response = await registerService.register(user);
+
+            if (response.status === 201) {
+                navigate('/', { state: { successMessage: 'Usuario registrado exitosamente. Por favor, inicia sesión.' } });
+            } else {
+                onInputChange({
+                    target: {
+                        name: "errorMessage",
+                        value: response.detail,
+                    }
+                });
+                onInputChange({
+                    target: {
+                        name: 'isInvalid',
+                        value: true,
+                    },
+                });
+            }
         }
     };
 
@@ -90,7 +111,7 @@ const RegisterForm = () => {
 
     return (
         <>
-            <form onSubmit={handleSubmit} className='needs-validation' novalidate>
+            <form onSubmit={handleSubmit} className='needs-validation' noValidate>
                 <h1 className='text-center'>Register account</h1>
                 {(passwordError || isInvalid) && (
                     <div className='alert alert-danger alert-dismissible fade show d-inline-block mt-3' role='alert'>
