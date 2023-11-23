@@ -13,7 +13,7 @@ class CourseService(object):
         course = self.repo.get_by_name(obj_in.name, obj_in.created_by_id)
         if course:
             raise AppException.Conflict(detail=f"El usuario ya tiene un curso con ese nombre: {obj_in.name}")
-        return self.repo.create(obj_in).__dict__
+        return self.repo.create(obj_in)
 
     def get_all(self):
             return self.repo.get_all()

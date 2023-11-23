@@ -2,10 +2,16 @@ from pydantic import BaseModel, constr
 from datetime import datetime
 from typing import Optional
 
-class CourseSchema(BaseModel):
+class CourseCreateSchema(BaseModel):
     name: str
     description: str
     created_by_id: int
+
+class CourseSchema(CourseCreateSchema):
+    id: int
+
+    class Config:
+        orm_mode = True
 
 class CourseAuditSchema(CourseSchema):
     created_at: Optional[datetime]
