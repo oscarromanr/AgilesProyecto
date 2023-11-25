@@ -1,0 +1,33 @@
+.page-container{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+}
+
+.page-container .aside{
+    width: 70%;
+    height: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-container .main{
+    width: 30%;
+    height: 100%;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.img-container{
+    background-image: url(../../img/background.jpg);
+    background-size: cover;
+}
+
+.error {
+    border-color: red;
+}
